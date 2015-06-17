@@ -4,3 +4,8 @@
 require File.expand_path('../config/application', __FILE__)
 
 Rails.application.load_tasks
+
+desc "This task is called by the Heroku scheduler add-on"
+  task :fetch_feed => :environment do
+  Tasks::FetchFeedTask.test()
+end
