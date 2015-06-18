@@ -36,7 +36,7 @@ lists.each do |list|
         summary=node.text.strip()
         p "summary 入ってました！"
         p summary
-      end
+     end
     end
     puts ""
   end
