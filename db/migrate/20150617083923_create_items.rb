@@ -7,6 +7,7 @@ class CreateItems < ActiveRecord::Migration
       t.string :description
       t.text :related_articles
       t.text :tfidf
+      t.text :counts
 
       t.timestamps null: false
     end

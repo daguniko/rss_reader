@@ -31,10 +31,26 @@ task :cal_tfidf => :environment do
   @items = Item.all
   last_item = Item.last
   related_article = {}
-  @items.each do |item|
-#    for i in item.id..last_item.id
-#      related_article[i] = calculate_similarity_with_hash(hash1,hash2)
-#    end
 
+  @items.each do |item|
+    for i in (item.id)+1..(last_item.id)
+      main_item = Item.find(item.id)
+      main_item_counts = main_item.counts
+      compare_item = Item.find(i)
+      compare_item_counts = compare_item.counts
+      hash1 = main_item_counts.dup
+      hash2 = main_item_counts.dup
+      similarity = calculate_similarity_with_hash(hash1,hash2)
+
+      tfidf = main_item.tfidf
+      tfidf[compare_item.id] = similarity
+      main_item.save!
+
+      tfidf = compare_item.tfidf
+      tfidf[main_item.id] = similarity
+      compare_item.save!
+    end
   end
+
+
 end

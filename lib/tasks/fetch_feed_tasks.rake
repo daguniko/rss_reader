@@ -6,7 +6,6 @@ require "natto"
 
 task :feed_fetch_task => :environment do
   natto = Natto::MeCab.new
-  count_word = {}
   lists = ["主要,http://news.livedoor.com/topics/rss/top.xml",
     "国内,http://news.livedoor.com/topics/rss/dom.xml",
     "海外,http://news.livedoor.com/topics/rss/int.xml",
@@ -24,6 +23,7 @@ task :feed_fetch_task => :environment do
 
     feed.entries.each do |entry|
       @item = Item.new
+      count_word = {}
       if !Item.find_by_link(entry.url).nil?
         next
       else
@@ -33,30 +33,42 @@ task :feed_fetch_task => :environment do
         @item.entrydate = entry.published
         html = Nokogiri::HTML(open(entry.url))
         if html.xpath('//span[@itemprop="articleBody"]').blank?
+          title_flag = true
           @item.description = entry.title
         else
+          title_flag = false
           html.xpath('//span[@itemprop="articleBody"]').each do |node|
-            @item.description = node.text.strip()
-          end
-        end
-        text = @item.description
-        natto.parse(text) do |n|
-          if n.feature.split(/,/)[0] == "名詞"
-            if count_word[n.surface].nil?
-              count_word[n.surface] = 1
-            else
-              count_word[n.surface] += 1
-            end
+            if @item.description.nil?
+             @item.description = node.text.strip()
+           else
+             @item.description += node.text.strip()
+           end
+         end
+       end
+       text = @item.description
+       natto.parse(text) do |n|
+        if n.feature.split(/,/)[0] == "名詞"
+          if count_word[n.surface].nil?
+            count_word[n.surface] = 1
+          else
+            count_word[n.surface] += 1
           end
         end
       end
-      count_word.each{|key, value|
-        count_word.delete(key) if value <= 5
-      }
-      @item.tfidf = count_word
-      @item.save!
     end
+
+    if !title_flag
+      count_word.each{|key, value|
+        count_word.delete(key) if value <= 1
+      }
+    end
+
+    @item.counts = count_word
+    @item.tfidf = {}
+    @item.save!
   end
+end
+
 end
     #p entry.title      # => "Ruby Http Client Library Performance"
     #p entry.url
