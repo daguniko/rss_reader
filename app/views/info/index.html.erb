@@ -1,9 +1,36 @@
-<!--
-<% @items.each  do |each_item|  %>
+		<%   lists = ["主要,http://news.livedoor.com/topics/rss/top.xml",
+			"国内,http://news.livedoor.com/topics/rss/dom.xml",
+			"海外,http://news.livedoor.com/topics/rss/int.xml",
+			"IT 経済,http://news.livedoor.com/topics/rss/eco.xml",
+			"芸能,http://news.livedoor.com/topics/rss/ent.xml",
+			"スポーツ,http://news.livedoor.com/topics/rss/spo.xml",
+			"映画,http://news.livedoor.com/rss/summary/52.xml",
+			"グルメ,http://news.livedoor.com/topics/rss/gourmet.xml",
+			"女子,http://news.livedoor.com/topics/rss/love.xml",
+			"トレンド,http://news.livedoor.com/topics/rss/trend.xml"
+			] %>
 
-<%= each_item.title %>
-<%= each_item.link %>
-<%= each_item.description %>
 
-<% end %>
---!>
+			<% lists.each do |list| %>
+			<table border="1">
+				<tr>
+					<th>
+						カテゴリ名：<%= list.split(",")[0] %>
+						<p>
+						</p>
+					</th>
+				</tr>
+
+				<tr>
+					<% @items.where("category = ?",list.split(",")[0]).limit(10).each  do |each_item|  %>
+					<td align="center">
+						タイトル:<%= each_item.title %><br>
+						<%= link_to '続きを読む', "/detail/#{each_item.id}" %><br>
+						参考資料:<%= each_item.link %><br>
+					</td>
+				</tr>
+				<% end %>
+			</table>
+
+			<p>
+				<% end %>

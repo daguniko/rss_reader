@@ -1,0 +1,51 @@
+<table>
+	<tr>
+		<th>
+			<%= @item.title %>
+		</tr>
+	</th>
+
+	<tr>
+		<th>
+			<%= @item.link %>
+		</th>
+	</tr>
+	<tr>
+		<td>
+			<%= @item.description %>
+		</td>
+	</tr>
+</table>
+
+<% list = @item.related_articles %>
+<% art_name_1 = Item.find(list[0]).title %>
+<% art_name_1_id = Item.find(list[0]).id %>
+
+<% art_name_2 = Item.find(list[1]).title %>
+<% art_name_2_id = Item.find(list[1]).id %>
+
+<% art_name_3 = Item.find(list[2]).title %>
+<% art_name_3_id = Item.find(list[2]).id %>
+
+<table border = "1">
+	<tr
+	<th align="center">
+		関連記事
+	</th>
+</tr>
+<tr>
+	<td>
+		<%= link_to art_name_1, "/detail/#{art_name_1_id}" %>
+	</td>
+</tr>
+<tr>
+	<td>
+		<%= link_to art_name_2, "/detail/#{art_name_2_id}" %>
+	</td>
+</tr>
+<tr>
+	<td>
+		<%= link_to art_name_3, "/detail/#{art_name_3_id}" %>
+	</td>
+</tr>
+</table>

@@ -10,25 +10,7 @@
 	<center>
 		<h1>RSSリーダーサイト</h1>
 		<%= yield %>
-		<%   lists = ["主要,http://news.livedoor.com/topics/rss/top.xml",
-			"国内,http://news.livedoor.com/topics/rss/dom.xml",
-			"海外,http://news.livedoor.com/topics/rss/int.xml",
-			"IT 経済,http://news.livedoor.com/topics/rss/eco.xml",
-			"芸能,http://news.livedoor.com/topics/rss/ent.xml",
-			"スポーツ,http://news.livedoor.com/topics/rss/spo.xml",
-			"映画,http://news.livedoor.com/rss/summary/52.xml",
-			"グルメ,http://news.livedoor.com/topics/rss/gourmet.xml",
-			"女子,http://news.livedoor.com/topics/rss/love.xml",
-			"トレンド,http://news.livedoor.com/topics/rss/trend.xml"
-			] %>
-			<% lists.each do |list| %>
-			カテゴリ名：<%= list.split(",")[0] %><p>
-			<% @items.limit(10).each  do |each_item|  %>
-			<%= each_item.title %><br>
-			<%= each_item.link %><br>
-			<% end %>
-			<p>
-				<% end %>
+
 			</center>
 		</body>
 		</html>
