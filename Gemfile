@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem "nokogiri"
 gem "natto"
 gem "sanitize"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

@@ -1,37 +1,46 @@
 require 'feedjira'
 require "sanitize"
 require "natto"
+require "nokogiri"
+require "open-uri"
 
 task :feed_fetch_task => :environment do
   natto = Natto::MeCab.new
-  lists = ["主要,http://news.livedoor.com/topics/rss/top.xml",
-    "国内,http://news.livedoor.com/topics/rss/dom.xml",
-    "海外,http://news.livedoor.com/topics/rss/int.xml",
-    "IT 経済,http://news.livedoor.com/topics/rss/eco.xml",
-    "芸能,http://news.livedoor.com/topics/rss/ent.xml",
-    "スポーツ,http://news.livedoor.com/topics/rss/spo.xml",
-    "映画,http://news.livedoor.com/rss/summary/52.xml",
-    "グルメ,http://news.livedoor.com/topics/rss/gourmet.xml",
-    "女子,http://news.livedoor.com/topics/rss/love.xml",
-    "トレンド,http://news.livedoor.com/topics/rss/trend.xml"
-  ]
-  lists.each do |list|
-    category, category_url = list.split(",")
-    feed = Feedjira::Feed.fetch_and_parse(category_url)
-    p category
-    feed.entries.each do |entry|
+  lists = [#"主要,http://news.livedoor.com/topics/rss/top.xml",
+#    "国内,http://news.livedoor.com/topics/rss/dom.xml",
+#    "海外,http://news.livedoor.com/topics/rss/int.xml",
+#    "IT 経済,http://news.livedoor.com/topics/rss/eco.xml",
+#    "芸能,http://news.livedoor.com/topics/rss/ent.xml",
+#    "スポーツ,http://news.livedoor.com/topics/rss/spo.xml",
+#    "映画,http://news.livedoor.com/rss/summary/52.xml",
+#    "グルメ,http://news.livedoor.com/topics/rss/gourmet.xml",
+#    "女子,http://news.livedoor.com/topics/rss/love.xml",
+"トレンド,http://news.livedoor.com/topics/rss/trend.xml"
+]
+lists.each do |list|
+  category, category_url = list.split(",")
+  feed = Feedjira::Feed.fetch_and_parse(category_url)
+  p category
+  feed.entries.each do |entry|
     p entry.title      # => "Ruby Http Client Library Performance"
     p entry.url
-    #p entry.content
     p entry.published
-    natto.parse(Sanitize.clean(entry.summary.strip().gsub(/(\r\n|\r|\n|\f|\s)/,""))) do |n|
-      if n.feature[0] == "名"
-        puts "#{n.surface}"
+    html = Nokogiri::HTML(open(entry.url))
+    #p html.search('span itemprop="articleBody"')
+    #puts html
+
+    if html.xpath('//span[@itemprop="articleBody"]').blank?
+      p entry.title
+    else
+      html.xpath('//span[@itemprop="articleBody"]').each do |node|
+        summary=node.text.strip()
+        p "summary 入ってました！"
+        p summary
       end
     end
     puts ""
   end
-puts Item.first.title
+  puts Item.first.title
 end
   # feed = Feedjira::Feed.fetch_and_parse("http://news.livedoor.com/topics/rss/top.xml",
   #   :on_success => lambda {|url, feed| p "first title: " + feed.entries.first.title },

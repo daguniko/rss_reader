@@ -169,6 +169,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   natto
+  nokogiri
   rails (= 4.2.1)
   sanitize
   sass-rails (~> 5.0)
