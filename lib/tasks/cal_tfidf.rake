@@ -30,7 +30,6 @@ task :cal_tfidf => :environment do
 
   @items = Item.all
   last_item = Item.last
-  related_article = {}
 
   @items.each do |item|
     for i in (item.id)+1..(last_item.id)
@@ -50,7 +49,23 @@ task :cal_tfidf => :environment do
       tfidf[main_item.id] = similarity
       compare_item.save!
     end
+    p top3 = main_item.tfidf.dup.sort_by{|k,v| -v}
+    main_item.related_articles.push(top3[0][0],top3[1][0], top3[2][0])
+
+    #p top3 = main_item.tfidf.to_a.sort{|a,b| (b[1] <=> a[1]) * 2 + (a[0] <=> b[0])}
+    #top3 = main_item.tfidf.to_a.sort
+#    related = ["aiueo"]
+    #related_article.push(top3[0],top3[1],top3[2])
+ #   main_item.related_article = related
+    main_item.save!
+    # p "top3" + top3
+    # p "top3[0]" + top3[0]
+    # p "top3[0][0]" + top3[0][0]
+
+
   end
+
+
 
 
 end

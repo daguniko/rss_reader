@@ -65,6 +65,7 @@ task :feed_fetch_task => :environment do
 
     @item.counts = count_word
     @item.tfidf = {}
+    @item.related_articles = []
     @item.save!
   end
 end
