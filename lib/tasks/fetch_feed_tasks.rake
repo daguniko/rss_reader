@@ -20,28 +20,36 @@ task :feed_fetch_task => :environment do
 lists.each do |list|
   category, category_url = list.split(",")
   feed = Feedjira::Feed.fetch_and_parse(category_url)
-  p category
+
   feed.entries.each do |entry|
-    p entry.title      # => "Ruby Http Client Library Performance"
-    p entry.url
-    p entry.published
-    html = Nokogiri::HTML(open(entry.url))
+    @item = Item.new
+    if !Item.find_by_link(entry.url).nil?
+      next
+    else
+      @item.title = entry.title
+      @item.link = entry.url
+      @item.entrydate = entry.published
+      html = Nokogiri::HTML(open(entry.url))
+      if html.xpath('//span[@itemprop="articleBody"]').blank?
+        @item.description = entry.title
+      else
+        html.xpath('//span[@itemprop="articleBody"]').each do |node|
+          @item.description = node.text.strip()
+        end
+      end
+    end
+    @item.save!
+  end
+  puts Item.last.title
+end
+
+    #p entry.title      # => "Ruby Http Client Library Performance"
+    #p entry.url
+    #p entry.published
+
     #p html.search('span itemprop="articleBody"')
     #puts html
 
-    if html.xpath('//span[@itemprop="articleBody"]').blank?
-      p entry.title
-    else
-      html.xpath('//span[@itemprop="articleBody"]').each do |node|
-        summary=node.text.strip()
-        p "summary 入ってました！"
-        p summary
-     end
-    end
-    puts ""
-  end
-  puts Item.first.title
-end
   # feed = Feedjira::Feed.fetch_and_parse("http://news.livedoor.com/topics/rss/top.xml",
   #   :on_success => lambda {|url, feed| p "first title: " + feed.entries.first.title },
   #   :on_failure => lambda {|url, response_code, response_header, response_body| p response_body })
