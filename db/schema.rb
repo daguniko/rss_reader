@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20150618070534) do
     t.date     "entrydate"
     t.string   "description"
     t.text     "related_articles"
+    t.text     "tfidf"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.string   "category"

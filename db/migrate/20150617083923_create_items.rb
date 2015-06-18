@@ -6,6 +6,7 @@ class CreateItems < ActiveRecord::Migration
       t.date :entrydate
       t.string :description
       t.text :related_articles
+      t.text :tfidf
 
       t.timestamps null: false
     end

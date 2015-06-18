@@ -2,8 +2,11 @@ require 'feedjira'
 require "sanitize"
 require "nokogiri"
 require "open-uri"
+require "natto"
 
 task :feed_fetch_task => :environment do
+  natto = Natto::MeCab.new
+  count_word = {}
   lists = ["主要,http://news.livedoor.com/topics/rss/top.xml",
     "国内,http://news.livedoor.com/topics/rss/dom.xml",
     "海外,http://news.livedoor.com/topics/rss/int.xml",
@@ -36,7 +39,21 @@ task :feed_fetch_task => :environment do
             @item.description = node.text.strip()
           end
         end
+        text = @item.description
+        natto.parse(text) do |n|
+          if n.feature.split(/,/)[0] == "名詞"
+            if count_word[n.surface].nil?
+              count_word[n.surface] = 1
+            else
+              count_word[n.surface] += 1
+            end
+          end
+        end
       end
+      count_word.each{|key, value|
+        count_word.delete(key) if value <= 5
+      }
+      @item.tfidf = count_word
       @item.save!
     end
   end
