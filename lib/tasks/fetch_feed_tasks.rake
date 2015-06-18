@@ -1,11 +1,9 @@
 require 'feedjira'
 require "sanitize"
-require "natto"
 require "nokogiri"
 require "open-uri"
 
 task :feed_fetch_task => :environment do
-  natto = Natto::MeCab.new
   lists = ["主要,http://news.livedoor.com/topics/rss/top.xml",
     "国内,http://news.livedoor.com/topics/rss/dom.xml",
     "海外,http://news.livedoor.com/topics/rss/int.xml",
@@ -42,7 +40,7 @@ task :feed_fetch_task => :environment do
       @item.save!
     end
   end
-
+end
     #p entry.title      # => "Ruby Http Client Library Performance"
     #p entry.url
     #p entry.published
@@ -53,7 +51,6 @@ task :feed_fetch_task => :environment do
   # feed = Feedjira::Feed.fetch_and_parse("http://news.livedoor.com/topics/rss/top.xml",
   #   :on_success => lambda {|url, feed| p "first title: " + feed.entries.first.title },
   #   :on_failure => lambda {|url, response_code, response_header, response_body| p response_body })
-end
 # class Tasks::FetchFeedTask
 #   def self.test
 #     # fetching a single feed

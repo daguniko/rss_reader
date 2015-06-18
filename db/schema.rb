@@ -18,8 +18,9 @@ ActiveRecord::Schema.define(version: 20150618070534) do
     t.string   "link"
     t.date     "entrydate"
     t.string   "description"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.text     "related_articles"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
     t.string   "category"
   end
 
