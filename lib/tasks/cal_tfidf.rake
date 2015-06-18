@@ -49,7 +49,7 @@ task :cal_tfidf => :environment do
       tfidf[main_item.id] = similarity
       compare_item.save!
     end
-    p top3 = main_item.tfidf.dup.sort_by{|k,v| -v}
+    top3 = main_item.tfidf.dup.sort_by{|k,v| -v}
     main_item.related_articles.push(top3[0][0],top3[1][0], top3[2][0])
 
     #p top3 = main_item.tfidf.to_a.sort{|a,b| (b[1] <=> a[1]) * 2 + (a[0] <=> b[0])}
