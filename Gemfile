@@ -6,6 +6,7 @@ group :production do
     gem 'thin'
 end
 
+gem 'mecab', '0.996'
 gem "nokogiri"
 gem "natto"
 gem "sanitize"
