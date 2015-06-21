@@ -4,7 +4,7 @@ require "nokogiri"
 require "open-uri"
 require "natto"
 
-task :feed_fetch_task => :environment do
+task :fetch_feed => :environment do
   natto = Natto::MeCab.new
   lists = ["主要,http://news.livedoor.com/topics/rss/top.xml",
     "国内,http://news.livedoor.com/topics/rss/dom.xml",
