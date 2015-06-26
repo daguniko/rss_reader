@@ -2,6 +2,11 @@
 ##Introduction
 This program is Simple RSS Reader Web application.
 
+Sample RSS is come from livedoor news.
+
+[Website](http://rss-reader-livedoor.herokuapp.com)
+
+
 ##how to use in local
 
 ```
